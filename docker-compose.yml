@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  rubiconmp-rectangletask.api:
+    image: ${DOCKER_REGISTRY-}rubiconmprectangletaskapi
+    container_name: Rectangletask.Api
+    build:
+      context: .
+      dockerfile: Rubiconmp-RectangleTask.Web/Dockerfile
+    depends_on:
+      - rectangletask-db
+      
+  rectangletask-db:
+    image: postgres:latest
+    container_name: Rectangletask.Db
+    environment:
+      - POSTGRES_DB=Rectangletask
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432

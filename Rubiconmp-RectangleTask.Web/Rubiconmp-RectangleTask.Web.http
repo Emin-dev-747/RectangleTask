@@ -1,0 +1,6 @@
+@Rubiconmp_RectangleTask.Web_HostAddress = http://localhost:5067
+
+GET {{Rubiconmp_RectangleTask.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
