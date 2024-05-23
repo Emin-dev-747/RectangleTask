@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Rubiconmp_RectangleTask.Application.Contracts;
+﻿using Rubiconmp_RectangleTask.Application.Contracts;
 using Rubiconmp_RectangleTask.Data;
-using System.Collections.Concurrent;
 
 namespace Rubiconmp_RectangleTask.Application.Repositories
 {
@@ -22,38 +20,19 @@ namespace Rubiconmp_RectangleTask.Application.Repositories
 
             for (var i = 0; i < elementCount; i++)
             {
-                rectangles.Add(new Rectangle(random.Next(-100,100), random.Next(-100, 100), random.Next(-500,500), random.Next(-100, 100)));
+                rectangles.Add(new Rectangle(random.Next(-100, 100), random.Next(-100, 100), random.Next(-500, 500), random.Next(-100, 100)));
             }
             _context.AddRange(rectangles);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Rectangle>> IntersectsSegmentAsync(Segment segment, CancellationToken cancellationToken)
+        public IEnumerable<Rectangle> IntersectsSegment(Segment segment, CancellationToken cancellationToken)
         {
-            var rectangles = await _context.Rectangles.ToListAsync();
+            var rectangles = _context.Rectangles
+                .AsParallel()
+                .Where(x => IntersectsSegment(x, segment));
 
-            if (rectangles == null)
-            {
-                return Enumerable.Empty<Rectangle>();
-            }
-
-            var intersectsRectangles = new ConcurrentBag<Rectangle>();
-
-            var options = new ParallelOptions()
-            {
-                CancellationToken = cancellationToken
-            };
-
-            await Task.Run(() =>
-                Parallel.ForEach(rectangles, options, rect =>
-                {
-                    if (IntersectsSegment(rect, segment))
-                    {
-                        intersectsRectangles.Add(rect);
-                    }
-                })
-            );
-            return intersectsRectangles ?? Enumerable.Empty<Rectangle>();
+            return rectangles ?? Enumerable.Empty<Rectangle>();
         }
         private static bool IntersectsSegment(Rectangle rectangle, Segment segment)
         {

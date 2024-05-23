@@ -4,7 +4,7 @@ namespace Rubiconmp_RectangleTask.Application.Contracts
 {
     public interface IRectangleRepository
     {
-        Task<IEnumerable<Rectangle>> IntersectsSegmentAsync(Segment segment, CancellationToken cancellationToken = default);
+        IEnumerable<Rectangle> IntersectsSegment(Segment segment, CancellationToken cancellationToken = default);
         Task SeedDataAsync(int elementCount);
     }
 }

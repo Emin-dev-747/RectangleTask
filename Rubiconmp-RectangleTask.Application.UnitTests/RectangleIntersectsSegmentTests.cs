@@ -20,7 +20,7 @@ namespace Rubiconmp_RectangleTask.Application.UnitTests
         [InlineData(6.2, 8.5, 14, -56)]
         [InlineData(-12, 4.5, 22, 5.7)]
         [InlineData(30, -17.7, 87.4, -5)]
-        public async Task Should_Return_A_ListOf_Rectangles(double x1, double y1, double x2, double y2)
+        public  void Should_Return_A_ListOf_Rectangles(double x1, double y1, double x2, double y2)
         {
             // Arrange
             Point point1 = new Point(x1, y1);
@@ -28,7 +28,7 @@ namespace Rubiconmp_RectangleTask.Application.UnitTests
 
             var segment = new Segment(point1, point2);
             // Act
-            var result = await _rectangleRepository.IntersectsSegmentAsync(segment, default);
+            var result = _rectangleRepository.IntersectsSegment(segment, default);
 
             // Assert
             result.Should().NotBeNull();

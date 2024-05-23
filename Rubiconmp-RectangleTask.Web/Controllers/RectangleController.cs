@@ -16,9 +16,9 @@ namespace Rubiconmp_RectangleTask.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> FindIntersectingRectangles(Segment segment, CancellationToken cancellationToken)
+        public IActionResult FindIntersectingRectangles(Segment segment, CancellationToken cancellationToken)
         {
-            var result = await _rectangleRepository.IntersectsSegmentAsync(segment, cancellationToken);
+            var result = _rectangleRepository.IntersectsSegment(segment, cancellationToken);
             return Ok(result);
         }
 
